@@ -1,13 +1,30 @@
 GO ?= go
 COVERAGE_FILE ?= coverage.out
 COVERAGE_MIN ?= 80
+PACKAGE_NAME ?= homework-go-2-linux-amd64
 
-.PHONY: help fmt fmt-check vet compile test test-unit test-integration test-race coverage coverage-check build clean run-all ci \
+.PHONY: help deps-check mod-check fmt fmt-check vet compile test test-unit test-integration test-race coverage coverage-check build package clean run-all ci \
 run-integer run-bases run-float run-boolean run-text run-constants run-conversion run-pointers run-calculator run-profile run-order \
 test-integer test-bases test-float test-boolean test-text test-constants test-conversion test-pointers test-calculator test-profile test-order
 
 help: ## Показать список команд
 	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z0-9_-]+:.*##/ {printf "%-24s %s\n", $$1, $$2}' $(MAKEFILE_LIST)
+
+deps-check: ## Скачать и проверить зависимости Go-модулей
+	$(GO) mod download
+	$(GO) mod verify
+
+mod-check: ## Проверить, что go.mod/go.sum не меняются после go mod tidy
+	$(GO) mod tidy
+	@if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then \
+		if [ -n "$$(git status --short -- go.mod go.sum)" ]; then \
+			git status --short -- go.mod go.sum; \
+			echo "go.mod/go.sum changed after go mod tidy"; \
+			exit 1; \
+		fi; \
+	else \
+		echo "not a git repository, skip go.mod/go.sum diff check"; \
+	fi
 
 fmt: ## Отформатировать Go-файлы
 	$(GO) fmt ./...
@@ -53,6 +70,21 @@ build: ## Собрать все main в bin/
 	$(GO) build -o bin/09_calculator ./cmd/09_calculator
 	$(GO) build -o bin/10_profile ./cmd/10_profile
 	$(GO) build -o bin/11_order ./cmd/11_order
+
+package: build ## Упаковать собранные бинарники в tar.gz
+	tar -czf bin/$(PACKAGE_NAME).tar.gz \
+		-C bin \
+		01_integer \
+		02_bases_bytes \
+		03_float \
+		04_boolean \
+		05_text \
+		06_constants \
+		07_conversion \
+		08_pointers \
+		09_calculator \
+		10_profile \
+		11_order
 
 clean: ## Удалить временные файлы
 	rm -rf bin $(COVERAGE_FILE)
@@ -136,4 +168,4 @@ test-profile: ## Unit-тесты пакета internal/profile
 test-order: ## Unit-тесты пакета internal/order
 	$(GO) test ./internal/order
 
-ci: fmt-check vet test-unit test-integration coverage-check build ## Полная локальная проверка как в CI
+ci: deps-check mod-check fmt-check vet test-unit test-integration test-race coverage-check build package ## Полная локальная проверка как в CI
