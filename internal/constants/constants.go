@@ -4,153 +4,205 @@ package constants
 // const, iota, enum-like значения, switch,
 // статусы, роли, приоритеты, типы событий и простые текстовые маппинги.
 
-// TODO: задайте имя приложения как константу.
-// Ожидаемое значение проверяется unit- и integration-тестами.
-const appName = ""
+const appName = "go-homework-2"
 
-// TODO: задайте максимальное количество попыток как константу.
-const maxAttempts = 0
+const maxAttempts = 3
 
 // Статусы оплаты.
-//
-// TODO: оформите связанные статусы через const-блок.
 const (
-	StatusNew      = 0
-	StatusPaid     = 1
-	StatusCanceled = 2
+	StatusNew = iota
+	StatusPaid
+	StatusCanceled
 )
 
 // Роли пользователя.
-//
-// TODO: оформите связанные роли через const-блок.
 const (
-	RoleGuest = 0
-	RoleUser  = 1
-	RoleAdmin = 2
+	RoleGuest = iota
+	RoleUser
+	RoleAdmin
 )
 
 // Приоритеты задачи.
-//
-// TODO: оформите приоритеты так, чтобы их значения шли по возрастанию важности.
 const (
-	PriorityLow    = 0
-	PriorityMedium = 0
-	PriorityHigh   = 0
+	PriorityLow = iota + 1
+	PriorityMedium
+	PriorityHigh
 )
 
 // Типы событий.
-//
-// TODO: оформите связанные типы событий через const-блок.
 const (
-	EventCreated = 0
-	EventUpdated = 0
-	EventDeleted = 0
+	EventCreated = iota
+	EventUpdated
+	EventDeleted
 )
 
 // AppName возвращает имя приложения.
-//
-// TODO: верните значение соответствующей константы.
 func AppName() string {
-	return ""
+	return appName
 }
 
 // MaxAttempts возвращает максимальное количество попыток.
-//
-// TODO: верните значение соответствующей константы.
 func MaxAttempts() int {
-	return 0
+	return maxAttempts
 }
 
 // StatusText возвращает текстовое представление статуса.
-//
-// TODO: преобразуйте известные статусы в текст, неизвестные — в "unknown".
 func StatusText(status int) string {
-	return ""
+	switch status {
+	case StatusNew:
+		return "new"
+	case StatusPaid:
+		return "paid"
+	case StatusCanceled:
+		return "canceled"
+	default:
+		return "unknown"
+	}
 }
 
 // IsFinalStatus проверяет, является ли статус финальным.
-//
-// TODO: определите, какие статусы завершают жизненный цикл оплаты.
 func IsFinalStatus(status int) bool {
-	return false
+	return status == StatusPaid || status == StatusCanceled
 }
 
 // NextStatus возвращает следующий статус.
-//
-// TODO: реализуйте переход из нового статуса в оплаченный.
-// Финальные и неизвестные статусы обработайте безопасно.
 func NextStatus(status int) int {
-	return 0
+	switch status {
+	case StatusNew:
+		return StatusPaid
+	case StatusPaid:
+		return StatusPaid
+	case StatusCanceled:
+		return StatusCanceled
+	default:
+		return StatusNew
+	}
 }
 
 // RoleText возвращает текстовое представление роли.
-//
-// TODO: преобразуйте известные роли в текст, неизвестные — в "unknown".
 func RoleText(role int) string {
-	return ""
+	switch role {
+	case RoleGuest:
+		return "guest"
+	case RoleUser:
+		return "user"
+	case RoleAdmin:
+		return "admin"
+	default:
+		return "unknown"
+	}
 }
 
 // CanEdit проверяет, может ли пользователь редактировать данные.
-//
-// TODO: разрешите редактирование только роли с максимальными правами.
 func CanEdit(role int) bool {
-	return false
+	return role == RoleAdmin
 }
 
 // HTTPStatusText возвращает текст HTTP-статуса.
-//
-// TODO: обработайте основные HTTP-коды из тестов и неизвестный код.
 func HTTPStatusText(code int) string {
-	return ""
+	switch code {
+	case 200:
+		return "OK"
+	case 201:
+		return "Created"
+	case 400:
+		return "Bad Request"
+	case 404:
+		return "Not Found"
+	default:
+		return "Unknown"
+	}
 }
 
 // DayType возвращает тип дня недели.
-//
-// TODO: определите рабочие и выходные дни по номеру дня.
-// Для этой задачи считаем: 1 — понедельник, 7 — воскресенье.
 func DayType(day int) string {
-	return ""
+	switch day {
+	case 1, 2, 3, 4, 5:
+		return "working"
+	case 6, 7:
+		return "weekend"
+	default:
+		return "unknown"
+	}
 }
 
 // PriorityText возвращает текстовое представление приоритета.
-//
-// TODO: преобразуйте известные приоритеты в текст, неизвестные — в "unknown".
 func PriorityText(priority int) string {
-	return ""
+	switch priority {
+	case PriorityLow:
+		return "low"
+	case PriorityMedium:
+		return "medium"
+	case PriorityHigh:
+		return "high"
+	default:
+		return "unknown"
+	}
 }
 
 // IsKnownStatus проверяет, известен ли статус.
-//
-// TODO: проверьте, входит ли статус в набор объявленных статусов.
 func IsKnownStatus(status int) bool {
-	return false
+	return status == StatusNew || status == StatusPaid || status == StatusCanceled
 }
 
 // PaymentStateText возвращает текст состояния оплаты.
-//
-// TODO: определите состояние оплаты по двум флагам.
-// Отмена должна иметь приоритет над оплатой.
 func PaymentStateText(paid, canceled bool) string {
-	return ""
+	if canceled {
+		return "canceled"
+	}
+
+	if paid {
+		return "paid"
+	}
+
+	return "pending"
 }
 
 // TrafficLightAction возвращает действие по цвету светофора.
-//
-// TODO: преобразуйте известные цвета светофора в действие.
 func TrafficLightAction(color string) string {
-	return ""
+	switch color {
+	case "red":
+		return "stop"
+	case "yellow":
+		return "wait"
+	case "green":
+		return "go"
+	default:
+		return "unknown"
+	}
 }
 
 // GradeText возвращает текстовую оценку по score.
-//
-// TODO: преобразуйте score в текстовую оценку по диапазонам из тестов.
 func GradeText(score int) string {
-	return ""
+	if score < 0 || score > 100 {
+		return "invalid"
+	}
+
+	if score >= 90 {
+		return "excellent"
+	}
+
+	if score >= 75 {
+		return "good"
+	}
+
+	if score >= 60 {
+		return "passed"
+	}
+
+	return "retry"
 }
 
 // EventTypeText возвращает текстовое представление типа события.
-//
-// TODO: преобразуйте известные типы событий в текст, неизвестные — в "unknown".
 func EventTypeText(eventType int) string {
-	return ""
+	switch eventType {
+	case EventCreated:
+		return "created"
+	case EventUpdated:
+		return "updated"
+	case EventDeleted:
+		return "deleted"
+	default:
+		return "unknown"
+	}
 }
