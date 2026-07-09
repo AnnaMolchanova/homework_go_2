@@ -61,11 +61,11 @@ func AddToValue(p *int, delta int) int {
 
 // MaxPointer возвращает указатель на большее значение.
 func MaxPointer(a, b *int) *int {
-	if a == nil {
-		return b
-	}
 	if b == nil {
 		return a
+	}
+	if a == nil {
+		return b
 	}
 	if *a >= *b {
 		return a
@@ -136,11 +136,11 @@ func ChoosePointer(primary, fallback *int) *int {
 
 // PointToLarger возвращает указатель на большее значение.
 func PointToLarger(a, b *int) *int {
-	if a == nil {
-		return b
-	}
 	if b == nil {
 		return a
+	}
+	if a == nil {
+		return b
 	}
 	if *a >= *b {
 		return a

@@ -35,7 +35,7 @@ func DiscountPrice(price, percent float64) float64 {
 	if percent < 0 {
 		return price
 	}
-	if percent > 100 {
+	if percent >= 100 {
 		return 0
 	}
 	return price - price*percent/100
