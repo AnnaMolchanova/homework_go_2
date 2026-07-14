@@ -14,21 +14,19 @@ import (
 // Пустое после очистки имя должно заменяться значением по умолчанию.
 // Точный формат итоговой строки смотрите в тестах.
 func BuildUserCard(name string, age int, active bool) string {
-	name = strings.TrimSpace(name)
-	if name == "" {
-		name = "Unknown"
-	} else {
-		name = strings.ToUpper(name[:1]) + strings.ToLower(name[1:])
-	}
+	trimSpaceName := strings.TrimSpace(name)
 
-	group := "minor"
-	if age >= 18 {
-		group = "adult"
+	titleName := strings.Title(strings.ToLower(trimSpaceName))
+	if titleName == "" {
+		titleName = "Unknown"
 	}
-
-	status := "inactive"
-	if active {
-		status = "active"
+	resultAdult := "adult"
+	if age < 18 {
+		resultAdult = "minor"
 	}
-	return fmt.Sprintf("name=%s age=%d group=%s status=%s", name, age, group, status)
+	resultStatus := "active"
+	if !active {
+		resultStatus = "inactive"
+	}
+	return fmt.Sprintf("name=%s age=%d group=%s status=%s", titleName, age, resultAdult, resultStatus)
 }
