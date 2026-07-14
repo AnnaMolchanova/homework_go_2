@@ -11,27 +11,26 @@ import "errors"
 // Деление и остаток от деления должны безопасно обрабатывать нулевой делитель.
 // Неизвестная операция должна возвращать ошибку.
 func Calculate(a, b int, operation string) (int, error) {
-	switch operation {
-	case "+":
-
+	if operation == "+" {
 		return a + b, nil
-	case "-":
-
+	} else if operation == "-" {
 		return a - b, nil
-	case "*":
+	} else if operation == "*" {
 		return a * b, nil
-	case "/":
+	} else if operation == "/" {
 		if b == 0 {
 			return 0, errors.New("division by zero")
 		}
 		return a / b, nil
-	case "%":
+
+	} else if operation == "%" {
 		if b == 0 {
-			return 0, errors.New("remainder division by zero")
+			return 0, errors.New("division by zero")
 		}
 		return a % b, nil
-	default:
-		return 0, errors.New("unknown operation")
 
+	} else {
+		return 0, errors.New("invalid operation")
 	}
+
 }
