@@ -1,13 +1,15 @@
 package order
 
+import (
+	"fmt"
+)
+
 // Блок order — объединяющая задача.
 // Здесь нужно закрепить:
 // constants/iota, switch, int conversion, bool,
 // вычисление цены в копейках и сборку итоговой строки.
 
 // Статусы заказа.
-//
-// TODO: связанные статусы должны иметь последовательные значения.
 const (
 	StatusNew = iota
 	StatusPaid
@@ -15,10 +17,25 @@ const (
 )
 
 // OrderSummary собирает краткое описание заказа.
-//
-// TODO: преобразуйте статус в текст, bool-флаг оплаты — в текстовое состояние,
 // цену в рублях — в копейки, затем соберите итоговую строку.
 // Неизвестный статус и некорректная цена должны обрабатываться безопасно.
 func OrderSummary(status int, priceRub int, paid bool) string {
-	return ""
+	statusText := "unknown"
+	switch status {
+	case StatusNew:
+		statusText = "new"
+	case StatusPaid:
+		statusText = "paid"
+	case StatusCanceled:
+		statusText = "canceled"
+	}
+	paymentText := "not_paid"
+	if paid {
+		paymentText = "paid"
+	}
+	if priceRub < 0 {
+		priceRub = 0
+	}
+	priceKop := priceRub * 100
+	return fmt.Sprintf("status=%s payment=%s price_kop=%d", statusText, paymentText, priceKop)
 }

@@ -5,107 +5,145 @@ package pointers
 // возврат указателя и безопасные проверки перед разыменованием.
 
 // ValueOrDefault возвращает значение по указателю или значение по умолчанию.
-//
-// TODO: безопасно прочитайте значение по указателю или используйте fallback.
 func ValueOrDefault(p *int, def int) int {
-	return 0
+	if p == nil {
+		return def
+	}
+	return *p
 }
 
 // Increment увеличивает значение по указателю на 1.
-//
-// TODO: измените исходное значение через указатель и верните новый результат.
 func Increment(p *int) int {
-	return 0
+	if p == nil {
+		return 0
+	}
+	*p = *p + 1
+	return *p
 }
 
 // SetValue записывает новое значение по указателю.
-//
-// TODO: запишите value по адресу, если это возможно, и верните успешность операции.
 func SetValue(p *int, value int) bool {
-	return false
+	if p == nil {
+		return false
+	}
+	*p = value
+	return true
 }
 
 // Swap меняет местами два значения по указателям.
-//
-// TODO: поменяйте два значения местами через указатели.
 func Swap(a, b *int) bool {
-	return false
+	if a == nil || b == nil {
+		return false
+	}
+	temp := *a
+	*a = *b
+	*b = temp
+	return true
 }
 
 // ResetToZero сбрасывает значение по указателю в 0.
-//
-// TODO: сбросьте исходное значение через указатель и верните успешность операции.
 func ResetToZero(p *int) bool {
-	return false
+	if p == nil {
+		return false
+	}
+	*p = 0
+	return true
 }
 
 // AddToValue прибавляет delta к значению по указателю.
-//
-// TODO: измените исходное значение на delta и верните новое значение.
 func AddToValue(p *int, delta int) int {
-	return 0
+	if p == nil {
+		return 0
+	}
+	*p = *p + delta
+	return *p
 }
 
 // MaxPointer возвращает указатель на большее значение.
-//
-// TODO: выберите указатель на большее значение с безопасной обработкой nil.
 func MaxPointer(a, b *int) *int {
-	return nil
+	if b == nil {
+		return a
+	}
+	if a == nil {
+		return b
+	}
+	if *a >= *b {
+		return a
+	}
+	return b
 }
 
 // IsNil проверяет, равен ли указатель nil.
-//
-// TODO: реализуйте проверку nil-указателя.
 func IsNil(p *int) bool {
-	return false
+	return p == nil
 }
 
 // CopyValue возвращает копию значения по указателю.
-//
-// TODO: безопасно прочитайте значение по указателю.
 func CopyValue(p *int) int {
-	return 0
+	if p == nil {
+		return 0
+	}
+	return *p
 }
 
 // DoubleInPlace умножает значение по указателю на 2.
-//
-// TODO: измените исходное значение через указатель.
 func DoubleInPlace(p *int) bool {
-	return false
+	if p == nil {
+		return false
+	}
+	*p = *p * 2
+	return true
 }
 
 // NewInt создаёт новое int-значение и возвращает указатель на него.
-//
-// TODO: создайте новое значение и верните указатель на него.
 func NewInt(value int) *int {
-	return nil
+	return &value
 }
 
 // DivideInto делит a на b и записывает результат в out.
-//
-// TODO: безопасно выполните целочисленное деление и запишите результат в out.
 func DivideInto(out *int, a, b int) bool {
-	return false
+	if out == nil || b == 0 {
+		return false
+	}
+	*out = a / b
+	return true
 }
 
 // ApplyDiscountInPlace применяет скидку к цене по указателю.
-//
-// TODO: измените цену через указатель с учётом процента скидки.
 // Некорректные значения должны обрабатываться безопасно.
 func ApplyDiscountInPlace(price *int, percent int) bool {
-	return false
+	if price == nil {
+		return false
+	}
+	if percent < 0 {
+		return false
+	}
+	if percent >= 100 {
+		*price = 0
+		return true
+	}
+	*price = *price - (*price * percent / 100)
+	return true
 }
 
 // ChoosePointer выбирает первый доступный указатель.
-//
-// TODO: выберите primary, если он доступен, иначе используйте fallback.
 func ChoosePointer(primary, fallback *int) *int {
-	return nil
+	if primary != nil {
+		return primary
+	}
+	return fallback
 }
 
 // PointToLarger возвращает указатель на большее значение.
-//
-// TODO: выберите указатель на большее значение с безопасной обработкой nil.
 func PointToLarger(a, b *int) *int {
-	return nil
+	if b == nil {
+		return a
+	}
+	if a == nil {
+		return b
+	}
+	if *a >= *b {
+		return a
+	}
+	return b
 }
